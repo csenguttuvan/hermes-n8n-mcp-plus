@@ -262,7 +262,7 @@ def create_workflow(workflow: dict, confirm: bool = False) -> dict[str, Any]:
                 
 
 @mcp.tool()
-def update_workflow(workflow_id: str, patch: dict, confirm: bool = False) dict [str, Any]:
+def update_workflow(workflow_id: str, patch: dict, confirm: bool = False) ->dict [str, Any]:
 
     """
     Update an existing workflow by ID using Patch semantics.
