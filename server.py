@@ -241,6 +241,18 @@ def container_logs(lines: int = 100) -> dict[str, Any]:
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
+@mcp.tool()
+def create_workflow()
+    
+
+@mcp.tool()
+def update_workflow()
+
+
+mcp.tool()
+def delete_workflow()
+
+
 
 if __name__ == "__main__":
     mcp.run()
