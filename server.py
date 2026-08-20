@@ -242,15 +242,74 @@ def container_logs(lines: int = 100) -> dict[str, Any]:
         return {"ok": False, "error": str(e)}
 
 @mcp.tool()
-def create_workflow()
-    
+def create_workflow(workflow: dict, confirm: bool = False) -> dict[str, Any]:
+    """
+    Create a new workflow in n8n from a full workflow JSON definition.
+
+    The workflow dict should match the n8n workflows API schema:
+    name, nodes, connections, settings, tags, projectId, etc.
+    Set confirm=true to actually create; otherwise this is a dry-run.
+    """
+    if not confirm:
+        return {
+            "ok": False,
+            "error": "Dry run only. Set confirm=true to create the workflow.",
+            "workflow_preview": _safe(workflow),
+        }
+
+    result = _request("POST", "/api/v1/workflows", json=workflow)
+    return result
+                
 
 @mcp.tool()
-def update_workflow()
+def update_workflow(workflow_id: str, patch: dict, confirm: bool = False) dict [str, Any]:
 
+    """
+    Update an existing workflow by ID using Patch semantics.
 
-mcp.tool()
-def delete_workflow()
+    'patch' should contain only the fields to change, e.g. nodes, connections,
+    settings, tags, or name. Set confirm=true to actually apply the update.
+    """
+    current = get_workflow(workflow_id)
+    if not current.get("ok"):
+        return {
+            "ok": False,
+            "error": "Failed to fetch current workflow before update.",
+            "current": current,
+        }
+
+    if not confirm:
+        return {
+            "ok": False,
+            "error": "Dry run only. Set confirm=true to apply the update.",
+            "current_preview": current,
+            "patch_preview": _safe(patch),
+        }
+
+    result = _request("PATCH", f"/api/v1/workflows/{workflow_id}", json=patch)
+    return result
+
+@mcp.tool()
+def delete_workflow(workflow_id: str, confirm: bool = False) -> dict[str, Any]:
+    """
+    Permanently delete a workflow by ID.
+
+    This is destructive. Always requires confirm=true.
+    Consider exporting the workflow first via export_workflow(...)
+    """
+    if not confirm:
+        backup = export_workflow(workflow_id)
+        return {
+            "ok": False,
+            "error": "Dry run only. Set confirm=true to delete the workflow.",
+            "backup_preview": backup,
+        }
+
+    result = _request("DELETE", f"/api/v1/workflows/{workflow_id}")
+    # DELETE often returns empty body; normalize a simple response
+    if result.get("ok"):
+        return {"ok": True, "deleted_workflow_id": workflow_id}
+    return result
 
 
 
