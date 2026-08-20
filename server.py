@@ -243,7 +243,6 @@ def container_logs(lines: int = 100) -> dict[str, Any]:
 
 @mcp.tool()
 def create_workflow(workflow: dict, confirm: bool = False) -> dict[str, Any]:
-    
     """Create a new workflow in n8n from a full workflow JSON definition.
     The workflow dict should match the n8n workflows API schema:
     name, nodes, connections, settings, tags, projectId, etc.
@@ -262,7 +261,6 @@ def create_workflow(workflow: dict, confirm: bool = False) -> dict[str, Any]:
 
 @mcp.tool()
 def update_workflow(workflow_id: str, patch: dict, confirm: bool = False) ->dict [str, Any]:
-
     """Update an existing workflow by ID using Patch semantics.
     'patch' should contain only the fields to change, e.g. nodes, connections,
     settings, tags, or name. Set confirm=true to actually apply the update."""
