@@ -243,13 +243,12 @@ def container_logs(lines: int = 100) -> dict[str, Any]:
 
 @mcp.tool()
 def create_workflow(workflow: dict, confirm: bool = False) -> dict[str, Any]:
-    """
-    Create a new workflow in n8n from a full workflow JSON definition.
-
+    
+    """Create a new workflow in n8n from a full workflow JSON definition.
     The workflow dict should match the n8n workflows API schema:
     name, nodes, connections, settings, tags, projectId, etc.
-    Set confirm=true to actually create; otherwise this is a dry-run.
-    """
+    Set confirm=true to actually create; otherwise this is a dry-run."""
+    
     if not confirm:
         return {
             "ok": False,
@@ -264,12 +263,9 @@ def create_workflow(workflow: dict, confirm: bool = False) -> dict[str, Any]:
 @mcp.tool()
 def update_workflow(workflow_id: str, patch: dict, confirm: bool = False) ->dict [str, Any]:
 
-    """
-    Update an existing workflow by ID using Patch semantics.
-
+    """Update an existing workflow by ID using Patch semantics.
     'patch' should contain only the fields to change, e.g. nodes, connections,
-    settings, tags, or name. Set confirm=true to actually apply the update.
-    """
+    settings, tags, or name. Set confirm=true to actually apply the update."""
     current = get_workflow(workflow_id)
     if not current.get("ok"):
         return {
@@ -291,12 +287,9 @@ def update_workflow(workflow_id: str, patch: dict, confirm: bool = False) ->dict
 
 @mcp.tool()
 def delete_workflow(workflow_id: str, confirm: bool = False) -> dict[str, Any]:
-    """
-    Permanently delete a workflow by ID.
-
+    """Permanently delete a workflow by ID.
     This is destructive. Always requires confirm=true.
-    Consider exporting the workflow first via export_workflow(...)
-    """
+    Consider exporting the workflow first via export_workflow(...)"""
     if not confirm:
         backup = export_workflow(workflow_id)
         return {
